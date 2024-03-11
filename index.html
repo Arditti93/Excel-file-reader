@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Reader</title>
+    <script src="https://unpkg.com/read-excel-file@5.x/bundle/read-excel-file.min.js"></script>
+</head>
+<body>
+    <h2>First Spreadsheet</h2>
+    <input type="file" id="input" />
+    <br>
+    <br>
+    
+    <h2>Second Spreadsheet</h2>
+    <input type="file" id="input2" />
+    <br>
+    <br>
+    <button onclick="matchingDates()">Click me</button>
+</body>
+<script>
+    let first = []
+    let second = []
+    var input = document.getElementById('input')
+    input.addEventListener('change', function() {
+        readXlsxFile(input.files[0], { dateFormat: 'mm/dd/yyyy' }).then(function(rows, errors) {
+            rows.shift()
+            for (let i = 0; i < rows.length; i++) {
+                first.push({"name" : rows[i][0], "date" : rows[i][1]})   
+            }
+        })
+    })
+    var inpu2 = document.getElementById('input2')
+    input2.addEventListener('change', function() {
+        readXlsxFile(input2.files[0], { dateFormat: 'mm/dd/yyyy' }).then(function(rows2, errors) {
+            rows2.shift()
+            for (let i = 0; i < rows2.length; i++) {
+                second.push({"name" : rows2[i][0], "date" : rows2[i][1]})   
+            }
+        })
+    }) 
+
+    function matchingDates () {
+        for (let i = 0; i < first.length; i++) {
+        // Iterate over each object in the second array
+            for (let j = 0; j < second.length; j++) {
+                if (first[i].name === second[j].name) {
+                    if(new Date(first[i].date).toString() ===  new Date(second[j].date).toString()){
+                        console.log(`Common id found: ${first[i].date}, ${second[j].date} `);
+                    } else {
+
+                        console.log(`${first[i].name} has different dates ${first[i].date}, ${second[j].date} `);
+                    }
+                }
+            }
+        }
+
+    }
+</script>
+</html>
